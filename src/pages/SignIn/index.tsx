@@ -1,17 +1,20 @@
+import { useCallback, useRef, useContext } from "react";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
-import { useCallback, useRef } from "react";
 import { FiLogIn, FiMail, FiLock } from "react-icons/fi";
 import logoImg from "../../assets/logo-4.png";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import * as Yup from "yup";
+import {AuthContext} from "../../context/AuthContext";
 
 import { Container, Content, Background } from "./styles";
 import getValidationErrors from "../../utils/getValidationsErrors";
 
 export default function SignIn() {
   const formRef = useRef<FormHandles>(null);
+
+  const { signIn } = useContext(AuthContext);
 
   const handleSubmit = useCallback(async (data: Object) => {
     try {
@@ -26,11 +29,12 @@ export default function SignIn() {
       await schema.validate(data, {
         abortEarly: false,
       });
+      signIn()
     } catch (err: any) {
       const errors = getValidationErrors(err);
       formRef.current?.setErrors(errors);
     }
-  }, []);
+  }, [signIn]);
 
   return (
     <Container>
