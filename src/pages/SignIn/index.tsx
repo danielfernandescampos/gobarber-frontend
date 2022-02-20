@@ -6,10 +6,11 @@ import logoImg from "../../assets/logo-4.png";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import * as Yup from "yup";
-import { AuthContext, useAuth } from "../../hooks/AuthContext";
+import { useAuth } from "../../hooks/auth";
 
 import { Container, Content, Background } from "./styles";
 import getValidationErrors from "../../utils/getValidationsErrors";
+import { useToast } from "../../hooks/toast";
 
 interface SignInFormData {
   email: string;
@@ -20,6 +21,7 @@ export default function SignIn() {
   const formRef = useRef<FormHandles>(null);
 
   const { user, signIn } = useAuth();
+  const { addToast } = useToast();
 
   console.log(user);
 
@@ -37,7 +39,7 @@ export default function SignIn() {
         await schema.validate(data, {
           abortEarly: false,
         });
-        signIn({
+        await signIn({
           email: data.email,
           password: data.password,
         });
@@ -46,9 +48,14 @@ export default function SignIn() {
           const errors = getValidationErrors(err);
           formRef.current?.setErrors(errors);
         }
+        addToast({
+          type: 'error',
+          title: 'Erro na autenticação',
+          description: 'Ocorreu um erro ao fazer login'
+        })
       }
     },
-    [signIn]
+    [signIn, addToast]
   );
 
   return (
