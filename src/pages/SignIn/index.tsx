@@ -3,8 +3,8 @@ import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
 import { FiLogIn, FiMail, FiLock } from "react-icons/fi";
 import logoImg from "../../assets/logo-4.png";
-import Button from "../../components/button";
-import Input from "../../components/input";
+import Button from "../../components/Button";
+import Input from "../../components/Input";
 import * as Yup from "yup";
 import { AuthContext, useAuth } from "../../hooks/AuthContext";
 
